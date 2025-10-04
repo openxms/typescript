@@ -5,8 +5,8 @@ import type { XMSParseOptions } from ".";
 export type Trim<S extends string> = S extends ` ${infer R}`
 	? Trim<R>
 	: S extends `${infer R} `
-	? Trim<R>
-	: S;
+		? Trim<R>
+		: S;
 
 export type StripVersionPrefix<S extends string> =
 	S extends `xms/${number};${infer Rest}` ? Rest : S;
@@ -14,8 +14,8 @@ export type StripVersionPrefix<S extends string> =
 export type SplitSemicolons<S extends string> = S extends ""
 	? []
 	: S extends `${infer H};${infer T}`
-	? [H, ...SplitSemicolons<T>]
-	: [S];
+		? [H, ...SplitSemicolons<T>]
+		: [S];
 
 export type NormalizeKey<K extends string> = Lowercase<K>;
 
@@ -25,27 +25,27 @@ export type ParseToken<
 > = T extends ""
 	? never
 	: T extends `${infer K}=${infer V}`
-	? [NormalizeKey<Trim<K>>, Trim<V> extends "" ? null : Trim<V>]
-	: [NormalizeKey<Trim<T>>, null];
+		? [NormalizeKey<Trim<K>>, Trim<V> extends "" ? null : Trim<V>]
+		: [NormalizeKey<Trim<T>>, null];
 
 export type InferValueType<
 	Raw extends string | null,
 	Opts extends XMSParseOptions = {},
 > = Raw extends null
 	? Opts["coerceBooleans"] extends false
-	? ""
-	: true
+		? ""
+		: true
 	: Raw extends string
-	? Lowercase<Raw> extends "true" | "false"
-	? boolean
-	: Raw extends `"${string}"`
-	? string
-	: Opts["coerceNumbers"] extends true
-	? Raw extends `${number}`
-	? number
-	: string
-	: string
-	: never;
+		? Lowercase<Raw> extends "true" | "false"
+			? boolean
+			: Raw extends `"${string}"`
+				? string
+				: Opts["coerceNumbers"] extends true
+					? Raw extends `${number}`
+						? number
+						: string
+					: string
+		: never;
 
 export type Assign<Obj, K extends string, V> = Omit<Obj, K> & { [P in K]: V };
 
@@ -55,12 +55,12 @@ export type TokensToFlat<
 	Acc extends Record<string, any> = {},
 > = Tokens extends readonly [infer F, ...infer R]
 	? F extends readonly [infer K, infer V]
-	? K extends string
-	? V extends string | null
-	? TokensToFlat<R, Opts, Assign<Acc, K, InferValueType<V, Opts>>>
-	: TokensToFlat<R, Opts, Acc>
-	: TokensToFlat<R, Opts, Acc>
-	: TokensToFlat<R, Opts, Acc>
+		? K extends string
+			? V extends string | null
+				? TokensToFlat<R, Opts, Assign<Acc, K, InferValueType<V, Opts>>>
+				: TokensToFlat<R, Opts, Acc>
+			: TokensToFlat<R, Opts, Acc>
+		: TokensToFlat<R, Opts, Acc>
 	: Acc;
 
 export type ParseTokens<
@@ -87,8 +87,8 @@ export type SplitDots<S extends string> = S extends `${infer A}.${infer B}`
 
 export type UnionToIntersection<U> = (
 	U extends any
-	? (x: U) => void
-	: never
+		? (x: U) => void
+		: never
 ) extends (x: infer I) => void
 	? I
 	: never;
@@ -102,18 +102,18 @@ type BuildPath<Path extends string[], Value> = Path extends [
 
 type DeepMerge<T> = T extends Record<string, any>
 	? {
-		[K in keyof T]: T[K] extends Record<string, any>
-		? DeepMerge<UnionToIntersection<T[K]>>
-		: T[K];
-	}
+			[K in keyof T]: T[K] extends Record<string, any>
+				? DeepMerge<UnionToIntersection<T[K]>>
+				: T[K];
+		}
 	: T;
 
 type BuildNestedFromFlat<Flat extends Record<string, any>> = DeepMerge<
 	UnionToIntersection<
 		{
 			[K in keyof Flat & string]: K extends `${infer First}.${infer Rest}`
-			? { [P in First]: BuildPath<SplitDots<Rest>, Flat[K]> }
-			: { [P in K]: Flat[K] };
+				? { [P in First]: BuildPath<SplitDots<Rest>, Flat[K]> }
+				: { [P in K]: Flat[K] };
 		}[keyof Flat & string]
 	>
 >;
@@ -131,12 +131,12 @@ export type CoerceIndexedToArrays<
 	Opts extends XMSParseOptions,
 > = T extends Record<string, any>
 	? T extends any[]
-	? T
-	: HasOnlyNumericKeys<T> extends true
-	? CoerceToArray<T>
-	: {
-		[K in keyof T]: CoerceIndexedToArrays<T[K], Opts>;
-	}
+		? T
+		: HasOnlyNumericKeys<T> extends true
+			? CoerceToArray<T>
+			: {
+					[K in keyof T]: CoerceIndexedToArrays<T[K], Opts>;
+				}
 	: T;
 
 export type FilterFlatKeys<
@@ -157,20 +157,20 @@ export type InferDataFromString<
 > = string extends S
 	? any
 	: CoerceIndexedToArrays<
-		FilterFlatKeys<InferFlatFromString<S, Opts>, Opts> &
-		FilterNestedKeys<InferFlatFromString<S, Opts>, Opts>,
-		Opts
-	>;
+			FilterFlatKeys<InferFlatFromString<S, Opts>, Opts> &
+				FilterNestedKeys<InferFlatFromString<S, Opts>, Opts>,
+			Opts
+		>;
 
 export type InferMetaFromNode<N> = N extends null
 	? null
 	: N extends string | number | boolean
-	? N
-	: N extends readonly (infer E)[]
-	? InferMetaFromNode<E>[]
-	: N extends Record<string, any>
-	? { [K in keyof N]: InferMetaFromNode<N[K]> }
-	: unknown;
+		? N
+		: N extends readonly (infer E)[]
+			? InferMetaFromNode<E>[]
+			: N extends Record<string, any>
+				? { [K in keyof N]: InferMetaFromNode<N[K]> }
+				: unknown;
 
 export type InferXMS<
 	S extends string,
@@ -187,12 +187,12 @@ type GetNestedPath<T, Path extends readonly string[]> = Path extends readonly [
 	...infer Rest extends string[],
 ]
 	? First extends keyof T
-	? Rest extends readonly string[]
-	? Rest["length"] extends 0
-	? T[First]
-	: GetNestedPath<NonNullable<T[First]>, Rest>
-	: T[First]
-	: never
+		? Rest extends readonly string[]
+			? Rest["length"] extends 0
+				? T[First]
+				: GetNestedPath<NonNullable<T[First]>, Rest>
+			: T[First]
+		: never
 	: T;
 
 export type InferGetReturnType<
@@ -201,9 +201,7 @@ export type InferGetReturnType<
 > = Path extends readonly [] ? undefined : GetNestedPath<Meta, Path>;
 
 // inferred entries type
-export type InferMetaEntries<
-	Meta extends object,
-> = {
+export type InferMetaEntries<Meta extends object> = {
 	[name in keyof Meta & string]: {
 		name: name;
 		value: Meta[name] extends null | undefined ? "" : Meta[name];

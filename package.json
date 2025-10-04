@@ -48,5 +48,8 @@
 		"@types/bun": "latest",
 		"rimraf": "^5.0.10",
 		"typescript": "^5.9.3"
+	},
+	"directories": {
+		"test": "tests"
 	}
 }

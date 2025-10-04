@@ -25,8 +25,8 @@ describe("CommonMeta fallback parsing", () => {
 			if (v !== undefined && v !== null) {
 				expect(
 					typeof v === "string" ||
-					typeof v === "number" ||
-					typeof v === "boolean",
+						typeof v === "number" ||
+						typeof v === "boolean",
 				).toBe(true);
 			}
 		}

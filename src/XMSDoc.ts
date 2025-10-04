@@ -91,7 +91,8 @@ function isNode(o: any): o is XMSNode {
 export class XMSDoc<
 	Meta extends object = Record<string, any>,
 	Options extends XMSParseOptions = XMSParseOptions,
-> implements XMSParsedLikeGeneric<Meta> {
+> implements XMSParsedLikeGeneric<Meta>
+{
 	version = 0 as XMSVersionType;
 	isFallback = false;
 	entries: InferMetaEntries<Meta> = [];
@@ -198,7 +199,7 @@ export class XMSDoc<
 			this.version = 0;
 			this.entries =
 				(this.opts.reparseOnFallback ?? true)
-					? this.parseCommonMeta(this.input, state) as any
+					? (this.parseCommonMeta(this.input, state) as any)
 					: [];
 		}
 		this.ingest(this.entries as any, warn);
@@ -212,6 +213,10 @@ export class XMSDoc<
 		input: S,
 		options?: O,
 	): XMSDoc<InferDataFromString<S>>;
+	static parse<Data extends object, O extends XMSParseOptions = object>(
+		input: string,
+		options?: O,
+	): XMSDoc<Data>;
 	static parse(input: string, options?: XMSParseOptions): XMSDoc;
 	static parse(input: string, options?: XMSParseOptions): XMSDoc {
 		return new XMSDoc(input, { ...options, defer: false }) as any;

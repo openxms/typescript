@@ -63,7 +63,11 @@ describe("XMS v1 parsing (non-fallback)", () => {
 
 	test("multiple consecutive semicolons collapsed & trailing ignored", () => {
 		const line = "xms/1;;;username=steve;;item=sword;;;flag=true;;";
-		const doc = XMSDoc.parse(line);
+		const doc = XMSDoc.parse<{
+			username: string;
+			item: string;
+			flag: boolean;
+		}>(line);
 		expect(doc.data.username).toBe("steve");
 		expect(doc.data.item).toBe("sword");
 		expect(doc.data.flag).toBe(true);
