@@ -1,0 +1,52 @@
+{
+	"name": "openxms",
+	"version": "0.0.1",
+	"description": "Typescript implementation of the XMS (exchange metadata standard).",
+	"license": "MIT",
+	"author": "OpenXMS <info@openxms.cc>",
+	"homepage": "https://github.com/openxms/typescript#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/openxms/typescript.git"
+	},
+	"bugs": {
+		"url": "https://github.com/openxms/typescript/issues"
+	},
+	"keywords": [
+		"xms",
+		"metadata",
+		"parser",
+		"typescript",
+		"serializer",
+		"fallback",
+		"protocol"
+	],
+	"type": "module",
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		"types": "./dist/index.d.ts",
+		"import": "./dist/index.js",
+		"require": "./dist/index.cjs"
+	},
+	"scripts": {
+		"build": "bun run build.ts",
+		"prepublishOnly": "bun run clean && bun run format && bun run lint && bun run build && bun run typecheck",
+		"clean": "rimraf dist",
+		"format": "biome format --write",
+		"lint": "biome lint",
+		"typecheck": "tsc --noEmit"
+	},
+	"files": [
+		"dist",
+		"README.md",
+		"LICENSE.md"
+	],
+	"devDependencies": {
+		"@biomejs/biome": "2.2.5",
+		"@types/bun": "latest",
+		"rimraf": "^5.0.10",
+		"typescript": "^5.9.3"
+	}
+}
